@@ -11,7 +11,9 @@ async function run(): Promise<void> {
     core.exportVariable("GITHUB_APP_TOKEN", appToken);
 
     const checkoutInputs = checkout.prepareInput();
-    checkoutInputs.forEach(inp => checkout.checkoutRepository(appToken, inp));
+    for (const inp of checkoutInputs) {
+      await checkout.checkoutRepository(appToken, inp);
+    }
 
     if (core.getInput("add_git_config").toLowerCase() === "true") {
         await updateGlobalCredential(

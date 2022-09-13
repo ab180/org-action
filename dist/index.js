@@ -48255,7 +48255,9 @@ function run() {
         core.setOutput("token", appToken);
         core.exportVariable("GITHUB_APP_TOKEN", appToken);
         const checkoutInputs = checkout.prepareInput();
-        checkoutInputs.forEach(inp => checkout.checkoutRepository(appToken, inp));
+        for (const inp of checkoutInputs) {
+            yield checkout.checkoutRepository(appToken, inp);
+        }
         if (core.getInput("add_git_config").toLowerCase() === "true") {
             yield (0, checkout_1.updateGlobalCredential)(appToken, core.getInput("cwd", { required: true }));
         }
