@@ -2,9 +2,9 @@ name: 'Org Action'
 description: 'Github action for preparing org-level github token and git checkout using github app secrets'
 inputs:
   app_id:
-    description: "default ${{env.GITHUB_APP_ID}}"
+    description: "default env.GITHUB_APP_ID"
   app_private_key:
-    description: "default ${{env.GITHUB_APP_PRIVATE_KEY}}"
+    description: "default env.GITHUB_APP_PRIVATE_KEY"
   app_permission:
     description: "comma-seperated value, supported: `contents-ro`,`contents-rw`,`actions-rw` "
     default: "contents-ro"
