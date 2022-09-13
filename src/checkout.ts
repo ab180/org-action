@@ -40,11 +40,10 @@ export const checkoutRepository = async (
     token: string,
     target: CheckoutTarget
 ) => {
-    process.env["INPUT_repository"] = `${target.owner}/${target.repoName}`;
-    process.env["INPUT_ref"] = target.ref;
-    process.env["INPUT_path"] = target.location;
-    process.env["INPUT_token"] = token;
-    core.info(`token : lenght:${token.length}`)
+    process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
+    process.env["INPUT_REF"] = target.ref;
+    process.env["INPUT_PATH"] = target.location;
+    process.env["INPUT_TOKEN"] = token;
     try {
         const sourceSettings = await inputHelper.getInputs();
         await gitSourceProvider.getSource(sourceSettings);
