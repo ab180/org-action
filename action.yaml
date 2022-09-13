@@ -1,0 +1,30 @@
+name: 'Org Action'
+description: 'Github action for preparing org-level github token and git checkout using github app secrets'
+inputs:
+  app_id:
+    description: "default ${{env.GITHUB_APP_ID}}"
+  app_private_key:
+    description: "default ${{env.GITHUB_APP_PRIVATE_KEY}}"
+  app_permission:
+    description: "comma-seperated value, supported: `contents-ro`,`contents-rw`,`actions-rw` "
+    default: "contents-ro"
+  checkout:
+    description: |
+      multiline-input, formatted "<repo_name>@<ref>: <checkout location>"
+      repository should exist in same owner of workflow's and able to read with github app token 
+      `@<ref>` can bo omitted and uses HEAD by default.
+    default: ""
+  cwd:
+    description: "current working directory."
+    default: ${{github.workspace}}
+  add_git_config:
+    description: "add github app token into git config to use when checkout organization repository"
+    default: 'true'
+outputs:
+  token:
+    description: "github app token, it is also exported to environment named as `GITHUB_APP_TOKEN` and can be used in same job"
+
+runs:
+  using: node16
+  main: dist/index.js
+  post: dist/index.js
