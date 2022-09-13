@@ -55840,6 +55840,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const githubInput = githubApp.prepareInput();
         const appToken = yield githubApp.installationToken(githubInput);
+        core.setOutput("token", appToken);
+        core.exportVariable("GITHUB_APP_TOKEN", appToken);
         const checkoutInputs = checkout.prepareInput();
         checkoutInputs.forEach(inp => checkout.checkoutRepository(appToken, inp));
         if (core.getInput("add_git_config").toLowerCase() === "true") {
