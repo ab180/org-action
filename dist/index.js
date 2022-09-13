@@ -55626,7 +55626,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkoutRepository = exports.prepareInput = void 0;
+exports.updateGlobalCredential = exports.checkoutRepository = exports.prepareInput = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const dist_1 = __nccwpck_require__(5618);
@@ -55669,6 +55669,15 @@ const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, 
     delete process.env["INPUT_token"];
 });
 exports.checkoutRepository = checkoutRepository;
+const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, void 0, function* () {
+    const git = yield (0, dist_1.createCommandManager)(workspace, false);
+    const authHelper = (0, dist_1.createAuthHelper)(git, { authToken: token });
+    authHelper.insteadOfValues.push(`ssh://git@${(0, dist_1.getServerUrl)()}/`);
+    authHelper.insteadOfValues.push(`git@${(0, dist_1.getServerUrl)()}/`);
+    authHelper.insteadOfValues.push(`ssh://git@${(0, dist_1.getServerUrl)()}:`);
+    yield authHelper.configureGlobalAuth();
+});
+exports.updateGlobalCredential = updateGlobalCredential;
 
 
 /***/ }),
@@ -55823,7 +55832,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
 const checkout = __importStar(__nccwpck_require__(2652));
+const checkout_1 = __nccwpck_require__(2652);
 const githubApp = __importStar(__nccwpck_require__(1432));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -55831,6 +55842,9 @@ function run() {
         const appToken = yield githubApp.installationToken(githubInput);
         const checkoutInputs = checkout.prepareInput();
         checkoutInputs.forEach(inp => checkout.checkoutRepository(appToken, inp));
+        if (core.getInput("add_git_config").toLowerCase() === "true") {
+            yield (0, checkout_1.updateGlobalCredential)(appToken, core.getInput("cwd", { required: true }));
+        }
     });
 }
 run();
