@@ -20,10 +20,16 @@ type Input = {
 };
 
 export const prepareInput = (): Input => {
-    const appId = core.getInput("app_id", { required: true });
-    const privateKeyInput = core.getInput("app_private_key", {
-        required: true
-    });
+    const appId = core.getInput("app_id") || process.env.GITHUB_APP_ID || "";
+    const privateKeyInput =
+        core.getInput("app_private_key") ||
+        process.env.GITHUB_APP_PRIVATE_KEY ||
+        "";
+
+    if (!appId || !privateKeyInput) {
+        throw new Error("appId or privateKeyInput is empty");
+    }
+
     const permissionInput = core
         .getInput("app_permission", { required: true })
         .split(",");

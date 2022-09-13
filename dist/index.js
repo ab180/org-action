@@ -55734,10 +55734,13 @@ const request_1 = __nccwpck_require__(6234);
 const ensure_error_1 = __importDefault(__nccwpck_require__(1056));
 const is_base64_1 = __importDefault(__nccwpck_require__(1310));
 const prepareInput = () => {
-    const appId = core.getInput("app_id", { required: true });
-    const privateKeyInput = core.getInput("app_private_key", {
-        required: true
-    });
+    const appId = core.getInput("app_id") || process.env.GITHUB_APP_ID || "";
+    const privateKeyInput = core.getInput("app_private_key") ||
+        process.env.GITHUB_APP_PRIVATE_KEY ||
+        "";
+    if (!appId || !privateKeyInput) {
+        throw new Error("appId or privateKeyInput is empty");
+    }
     const permissionInput = core
         .getInput("app_permission", { required: true })
         .split(",");
