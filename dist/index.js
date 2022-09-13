@@ -48069,10 +48069,10 @@ const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, 
     catch (error) {
         core.setFailed(`fail to checkout for ${target.owner}/${target.repoName} : ${(0, ensure_error_1.default)(error)}`);
     }
-    delete process.env["INPUT_repository"];
-    delete process.env["INPUT_ref"];
-    delete process.env["INPUT_path"];
-    delete process.env["INPUT_token"];
+    delete process.env["INPUT_REPOSITORY"];
+    delete process.env["INPUT_REF"];
+    delete process.env["INPUT_PATH"];
+    delete process.env["INPUT_TOKEN"];
 });
 exports.checkoutRepository = checkoutRepository;
 const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, void 0, function* () {

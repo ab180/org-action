@@ -52,10 +52,10 @@ export const checkoutRepository = async (
             `fail to checkout for ${target.owner}/${target.repoName} : ${ensureError(error)}`
         );
     }
-    delete process.env["INPUT_repository"];
-    delete process.env["INPUT_ref"];
-    delete process.env["INPUT_path"];
-    delete process.env["INPUT_token"];
+    delete process.env["INPUT_REPOSITORY"];
+    delete process.env["INPUT_REF"];
+    delete process.env["INPUT_PATH"];
+    delete process.env["INPUT_TOKEN"];
 };
 
 export const updateGlobalCredential = async (
