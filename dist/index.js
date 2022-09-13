@@ -48059,7 +48059,7 @@ const prepareInput = () => {
 exports.prepareInput = prepareInput;
 const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, function* () {
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
-    process.env["INPUT_REF"] = target.ref || 'main';
+    process.env["INPUT_REF"] = target.ref || "main";
     process.env["INPUT_PATH"] = target.location;
     process.env["INPUT_TOKEN"] = token;
     try {
@@ -48077,9 +48077,11 @@ const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, 
 exports.checkoutRepository = checkoutRepository;
 const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, void 0, function* () {
     const git = yield (0, git_command_manager_1.createCommandManager)(workspace, false);
+    git.removeEnvironmentVariable("HOME");
     const authHelper = (0, git_auth_helper_1.createAuthHelper)(git, {
         authToken: token
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const anyAuthHelper = authHelper;
     anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)().hostname}/`);
     anyAuthHelper.insteadOfValues.push(`git@${(0, url_helper_1.getServerUrl)().hostname}/`);

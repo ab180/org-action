@@ -12,7 +12,7 @@ async function run(): Promise<void> {
 
     const checkoutInputs = checkout.prepareInput();
     for (const inp of checkoutInputs) {
-      await checkout.checkoutRepository(appToken, inp);
+        await checkout.checkoutRepository(appToken, inp);
     }
 
     if (core.getInput("add_git_config").toLowerCase() === "true") {
