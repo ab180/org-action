@@ -48059,7 +48059,7 @@ const prepareInput = () => {
 exports.prepareInput = prepareInput;
 const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, function* () {
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
-    process.env["INPUT_REF"] = target.ref;
+    process.env["INPUT_REF"] = target.ref || 'main';
     process.env["INPUT_PATH"] = target.location;
     process.env["INPUT_TOKEN"] = token;
     try {
