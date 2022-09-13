@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/ab180/org-action#readme",
   "scripts": {
-    "build": "tsc && ncc build src/index.ts -o dist && rm -rf ./lib",
+    "build": "tsc -b node_modules/checkout && tsc && ncc build src/index.ts -o dist && rm -rf ./lib",
     "test": "tsc --noEmit && jest --coverage",
     "lint": "eslint src/*.ts",
     "lint:fix": "eslint src/*.ts --fix"

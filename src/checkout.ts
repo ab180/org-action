@@ -1,12 +1,12 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import {
-    createAuthHelper,
-    createCommandManager,
-    getServerUrl,
-    gitSourceProvider,
-    inputHelper
-} from "checkout/dist";
+import { createAuthHelper } from "checkout/lib/git-auth-helper";
+import { createCommandManager } from "checkout/lib/git-command-manager";
+import * as gitSourceProvider from "checkout/lib/git-source-provider";
+import { IGitSourceSettings } from "checkout/lib/git-source-settings";
+import * as inputHelper from "checkout/lib/input-helper";
+import { getServerUrl } from "checkout/lib/url-helper";
+
 import ensureError from "ensure-error";
 import { resolve } from "path";
 
@@ -63,9 +63,12 @@ export const updateGlobalCredential = async (
     workspace: string
 ) => {
     const git = await createCommandManager(workspace, false);
-    const authHelper = createAuthHelper(git, { authToken: token });
-    authHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}/`);
-    authHelper.insteadOfValues.push(`git@${getServerUrl()}/`);
-    authHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}:`);
+    const authHelper = createAuthHelper(git, {
+        authToken: token
+    } as unknown as IGitSourceSettings);
+    const anyAuthHelper = authHelper as any;
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}/`);
+    anyAuthHelper.insteadOfValues.push(`git@${getServerUrl()}/`);
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}:`);
     await authHelper.configureGlobalAuth();
 };
