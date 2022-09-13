@@ -48081,9 +48081,9 @@ const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, v
         authToken: token
     });
     const anyAuthHelper = authHelper;
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)()}/`);
-    anyAuthHelper.insteadOfValues.push(`git@${(0, url_helper_1.getServerUrl)()}/`);
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)()}:`);
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)().origin}/`);
+    anyAuthHelper.insteadOfValues.push(`git@${(0, url_helper_1.getServerUrl)().origin}/`);
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)().origin}:`);
     yield authHelper.configureGlobalAuth();
 });
 exports.updateGlobalCredential = updateGlobalCredential;

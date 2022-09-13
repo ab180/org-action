@@ -67,8 +67,8 @@ export const updateGlobalCredential = async (
         authToken: token
     } as unknown as IGitSourceSettings);
     const anyAuthHelper = authHelper as any;
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}/`);
-    anyAuthHelper.insteadOfValues.push(`git@${getServerUrl()}/`);
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl()}:`);
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl().origin}/`);
+    anyAuthHelper.insteadOfValues.push(`git@${getServerUrl().origin}/`);
+    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl().origin}:`);
     await authHelper.configureGlobalAuth();
 };
