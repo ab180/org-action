@@ -44,12 +44,13 @@ export const checkoutRepository = async (
     process.env["INPUT_ref"] = target.ref;
     process.env["INPUT_path"] = target.location;
     process.env["INPUT_token"] = token;
+    core.info(`token : lenght:${token.length}`)
     try {
         const sourceSettings = await inputHelper.getInputs();
         await gitSourceProvider.getSource(sourceSettings);
     } catch (error: unknown) {
         core.setFailed(
-            `fail to checkout for ${target.owner} : ${ensureError(error)}`
+            `fail to checkout for ${target.owner}/${target.repoName} : ${ensureError(error)}`
         );
     }
     delete process.env["INPUT_repository"];

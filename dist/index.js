@@ -48031,14 +48031,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateGlobalCredential = exports.checkoutRepository = exports.prepareInput = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-// import {
-//     createAuthHelper,
-//     createCommandManager,
-//     getServerUrl,
-//     gitSourceProvider,
-//     inputHelper,
-//     IGitSourceSettings
-// } from "checkout/dist";
 const git_auth_helper_1 = __nccwpck_require__(8777);
 const git_command_manager_1 = __nccwpck_require__(2933);
 const gitSourceProvider = __importStar(__nccwpck_require__(3925));
@@ -48070,12 +48062,13 @@ const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, 
     process.env["INPUT_ref"] = target.ref;
     process.env["INPUT_path"] = target.location;
     process.env["INPUT_token"] = token;
+    core.info(`token : lenght:${token.length}`);
     try {
         const sourceSettings = yield inputHelper.getInputs();
         yield gitSourceProvider.getSource(sourceSettings);
     }
     catch (error) {
-        core.setFailed(`fail to checkout for ${target.owner} : ${(0, ensure_error_1.default)(error)}`);
+        core.setFailed(`fail to checkout for ${target.owner}/${target.repoName} : ${(0, ensure_error_1.default)(error)}`);
     }
     delete process.env["INPUT_repository"];
     delete process.env["INPUT_ref"];
