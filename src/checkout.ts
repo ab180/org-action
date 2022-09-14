@@ -1,9 +1,7 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { createAuthHelper } from "checkout/lib/git-auth-helper";
 import { createCommandManager } from "checkout/lib/git-command-manager";
 import * as gitSourceProvider from "checkout/lib/git-source-provider";
-import { IGitSourceSettings } from "checkout/lib/git-source-settings";
 import * as inputHelper from "checkout/lib/input-helper";
 import { getServerUrl } from "checkout/lib/url-helper";
 import ensureError from "ensure-error";
@@ -64,15 +62,37 @@ export const updateGlobalCredential = async (
     workspace: string
 ) => {
     const git = await createCommandManager(workspace, false);
-    git.removeEnvironmentVariable("HOME");
-    const authHelper = createAuthHelper(git, {
-        authToken: token
-    } as unknown as IGitSourceSettings);
+    const serverUrl = getServerUrl();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const anyAuthHelper = authHelper as any;
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl().hostname}/`);
-    anyAuthHelper.insteadOfValues.push(`git@${getServerUrl().hostname}/`);
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${getServerUrl().hostname}:`);
-    await authHelper.configureGlobalAuth();
+    const tokenConfigKey = `http.${serverUrl.origin}/.extraheader`; // "origin" is SCHEME://HOSTNAME[:PORT]
+    const basicCredential = Buffer.from(
+        `x-access-token:${token}`,
+        "utf8"
+    ).toString("base64");
+    core.setSecret(basicCredential);
+
+    const tokenConfigValue = `AUTHORIZATION: basic ${basicCredential}`;
+
+    const insteadOfKey = `url.${serverUrl.origin}/.insteadOf`; // "origin" is SCHEME://HOSTNAME[:PORT]
+    const insteadOfValues: Array<string> = [];
+    insteadOfValues.push(`git@${serverUrl.hostname}:`);
+    insteadOfValues.push(`ssh://git@${serverUrl.hostname}:`);
+    insteadOfValues.push(`git@${serverUrl.hostname}/`);
+    insteadOfValues.push(`ssh://git@${serverUrl.hostname}/`);
+
+    try {
+        await git.config(tokenConfigKey, tokenConfigValue, true, true);
+
+        for (const insteadOfValue of insteadOfValues) {
+            await git.config(insteadOfKey, insteadOfValue, true, true);
+        }
+    } catch (error) {
+        // Unset in case somehow written to the real global config
+        core.info(
+            "Encountered an error when attempting to configure token. Attempting unconfigure."
+        );
+        await git.tryConfigUnset(tokenConfigKey, true);
+        await git.tryConfigUnset(tokenConfigKey, true);
+        throw error;
+    }
 };

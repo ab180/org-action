@@ -48031,7 +48031,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateGlobalCredential = exports.checkoutRepository = exports.prepareInput = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const git_auth_helper_1 = __nccwpck_require__(8777);
 const git_command_manager_1 = __nccwpck_require__(2933);
 const gitSourceProvider = __importStar(__nccwpck_require__(3925));
 const inputHelper = __importStar(__nccwpck_require__(8405));
@@ -48077,16 +48076,30 @@ const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, 
 exports.checkoutRepository = checkoutRepository;
 const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, void 0, function* () {
     const git = yield (0, git_command_manager_1.createCommandManager)(workspace, false);
-    git.removeEnvironmentVariable("HOME");
-    const authHelper = (0, git_auth_helper_1.createAuthHelper)(git, {
-        authToken: token
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const anyAuthHelper = authHelper;
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)().hostname}/`);
-    anyAuthHelper.insteadOfValues.push(`git@${(0, url_helper_1.getServerUrl)().hostname}/`);
-    anyAuthHelper.insteadOfValues.push(`ssh://git@${(0, url_helper_1.getServerUrl)().hostname}:`);
-    yield authHelper.configureGlobalAuth();
+    const serverUrl = (0, url_helper_1.getServerUrl)();
+    const tokenConfigKey = `http.${serverUrl.origin}/.extraheader`; // "origin" is SCHEME://HOSTNAME[:PORT]
+    const basicCredential = Buffer.from(`x-access-token:${token}`, "utf8").toString("base64");
+    core.setSecret(basicCredential);
+    const tokenConfigValue = `AUTHORIZATION: basic ${basicCredential}`;
+    const insteadOfKey = `url.${serverUrl.origin}/.insteadOf`; // "origin" is SCHEME://HOSTNAME[:PORT]
+    const insteadOfValues = [];
+    insteadOfValues.push(`git@${serverUrl.hostname}:`);
+    insteadOfValues.push(`ssh://git@${serverUrl.hostname}:`);
+    insteadOfValues.push(`git@${serverUrl.hostname}/`);
+    insteadOfValues.push(`ssh://git@${serverUrl.hostname}/`);
+    try {
+        yield git.config(tokenConfigKey, tokenConfigValue, true, true);
+        for (const insteadOfValue of insteadOfValues) {
+            yield git.config(insteadOfKey, insteadOfValue, true, true);
+        }
+    }
+    catch (error) {
+        // Unset in case somehow written to the real global config
+        core.info("Encountered an error when attempting to configure token. Attempting unconfigure.");
+        yield git.tryConfigUnset(tokenConfigKey, true);
+        yield git.tryConfigUnset(tokenConfigKey, true);
+        throw error;
+    }
 });
 exports.updateGlobalCredential = updateGlobalCredential;
 
