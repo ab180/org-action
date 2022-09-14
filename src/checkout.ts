@@ -23,12 +23,15 @@ export const prepareInput = (): Array<CheckoutTarget> => {
         .filter(x => !!x)
         .map(line => {
             const [repoAndRef, location] = line.split(/\s*:\s*/);
-            const [repoName, ref] = repoAndRef.trim().split(/@/);
+            const [repoNameInput, ref] = repoAndRef.trim().split(/@/);
+            const repoName = repoNameInput.startsWith(`${owner}/`)
+                ? repoNameInput.split("/")[1]
+                : repoNameInput;
             return {
                 owner,
                 repoName,
                 ref,
-                location: resolve(cwd, location.trim())
+                location: resolve(cwd, (location || "").trim())
             };
         });
 };
@@ -38,9 +41,15 @@ export const checkoutRepository = async (
     target: CheckoutTarget
 ) => {
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
-    process.env["INPUT_REF"] = target.ref || "main";
     process.env["INPUT_PATH"] = target.location;
-    process.env["INPUT_TOKEN"] = token;
+    if (target.repoName === github.context.repo.repo) {
+        // token input does not needed inside self workflow.
+        // if target.ref is not defined, it uses current reference
+        process.env["INPUT_REF"] = target.ref;
+    } else {
+        process.env["INPUT_TOKEN"] = token;
+        process.env["INPUT_REF"] = target.ref || "main";
+    }
     try {
         const sourceSettings = await inputHelper.getInputs();
         await gitSourceProvider.getSource(sourceSettings);
@@ -92,7 +101,7 @@ export const updateGlobalCredential = async (
             "Encountered an error when attempting to configure token. Attempting unconfigure."
         );
         await git.tryConfigUnset(tokenConfigKey, true);
-        await git.tryConfigUnset(tokenConfigKey, true);
+        await git.tryConfigUnset(insteadOfKey, true);
         throw error;
     }
 };

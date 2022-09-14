@@ -48046,21 +48046,31 @@ const prepareInput = () => {
         .filter(x => !!x)
         .map(line => {
         const [repoAndRef, location] = line.split(/\s*:\s*/);
-        const [repoName, ref] = repoAndRef.trim().split(/@/);
+        const [repoNameInput, ref] = repoAndRef.trim().split(/@/);
+        const repoName = repoNameInput.startsWith(`${owner}/`)
+            ? repoNameInput.split("/")[1]
+            : repoNameInput;
         return {
             owner,
             repoName,
             ref,
-            location: (0, path_1.resolve)(cwd, location.trim())
+            location: (0, path_1.resolve)(cwd, (location || "").trim())
         };
     });
 };
 exports.prepareInput = prepareInput;
 const checkoutRepository = (token, target) => __awaiter(void 0, void 0, void 0, function* () {
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
-    process.env["INPUT_REF"] = target.ref || "main";
     process.env["INPUT_PATH"] = target.location;
-    process.env["INPUT_TOKEN"] = token;
+    if (target.repoName === github.context.repo.repo) {
+        // token input does not needed inside self workflow.
+        // if target.ref is not defined, it uses current reference
+        process.env["INPUT_REF"] = target.ref;
+    }
+    else {
+        process.env["INPUT_TOKEN"] = token;
+        process.env["INPUT_REF"] = target.ref || "main";
+    }
     try {
         const sourceSettings = yield inputHelper.getInputs();
         yield gitSourceProvider.getSource(sourceSettings);
@@ -48097,7 +48107,7 @@ const updateGlobalCredential = (token, workspace) => __awaiter(void 0, void 0, v
         // Unset in case somehow written to the real global config
         core.info("Encountered an error when attempting to configure token. Attempting unconfigure.");
         yield git.tryConfigUnset(tokenConfigKey, true);
-        yield git.tryConfigUnset(tokenConfigKey, true);
+        yield git.tryConfigUnset(insteadOfKey, true);
         throw error;
     }
 });
