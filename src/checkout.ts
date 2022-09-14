@@ -42,12 +42,11 @@ export const checkoutRepository = async (
 ) => {
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
     process.env["INPUT_PATH"] = target.location;
+    process.env["INPUT_TOKEN"] = token;
     if (target.repoName === github.context.repo.repo) {
-        // token input does not needed inside self workflow.
         // if target.ref is not defined, it uses current reference
         process.env["INPUT_REF"] = target.ref;
     } else {
-        process.env["INPUT_TOKEN"] = token;
         process.env["INPUT_REF"] = target.ref || "main";
     }
     try {
