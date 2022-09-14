@@ -6,13 +6,32 @@ inputs:
   app_private_key:
     description: "default env.GITHUB_APP_PRIVATE_KEY"
   app_permission:
-    description: "comma-seperated value, supported: `contents-ro`,`contents-rw`,`actions-rw` "
+    description: >
+      comma-seperated value, supported: 
+      - `contents-ro` : git checkout permission
+      - `contents-rw` : git commit and permission, it contains contents-ro also
+      - `actions-rw` : github actions(workflow) read and execute permission
     default: "contents-ro"
   checkout:
     description: |
-      multiline-input, formatted "<repo_name>@<ref>: <checkout location>"
-      repository should exist in same owner of workflow's and able to read with github app token 
-      `@<ref>` can bo omitted and uses HEAD by default.
+      multiline-input, formatted "<repository>@<ref>: <checkout path>"
+      
+      repository should exist in same owner of workflow's and able to read with github app token
+      <repository> should be repository name without owner or `<owner>/<name>`
+      
+      `@<ref>` can be omitted and uses `main` branch by default.
+      if repository is same with workflow's and @ref is omitted, it uses github.ref instead.
+      
+      be caution order of the lines, this actions delete path before checkout to avoid conflict.
+      outer path should be defined first and inner path should be defined last.
+      
+      for example,
+      ```yaml
+      with:
+        checkout:
+          ab180/web-server: .
+          ab180/common-lib: ./lib/common-lib
+      ```
     default: ""
   cwd:
     description: "current working directory."
