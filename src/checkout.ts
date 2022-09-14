@@ -43,7 +43,12 @@ export const checkoutRepository = async (
     process.env["INPUT_REPOSITORY"] = `${target.owner}/${target.repoName}`;
     process.env["INPUT_PATH"] = target.location;
     process.env["INPUT_TOKEN"] = token;
+    core.debug(`repo name : ${target.repoName}`);
+    core.debug(`context repo : ${github.context.repo.repo}`);
     if (target.repoName === github.context.repo.repo) {
+        core.info(
+            `repo name ${target.repoName} is workflow repository. use action_token instead`
+        );
         // if target.ref is not defined, it uses current reference
         process.env["INPUT_TOKEN"] = core.getInput("action_token") || token;
         process.env["INPUT_REF"] = target.ref;
