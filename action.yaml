@@ -39,6 +39,9 @@ inputs:
   add_git_config:
     description: "add github app token into git config to use when checkout organization repository"
     default: 'true'
+  action_token:
+    description: "token used when check out itself"
+    default: ${{ github.token }}
 outputs:
   token:
     description: "github app token, it is also exported to environment named as `GITHUB_APP_TOKEN` and can be used in same job"
