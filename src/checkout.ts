@@ -30,7 +30,7 @@ export const prepareInput = (): Array<CheckoutTarget> => {
             return {
                 owner,
                 repoName,
-                ref,
+                ref: ref || "",
                 location: resolve(cwd, (location || "").trim())
             };
         });

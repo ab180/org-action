@@ -48053,7 +48053,7 @@ const prepareInput = () => {
         return {
             owner,
             repoName,
-            ref,
+            ref: ref || "",
             location: (0, path_1.resolve)(cwd, (location || "").trim())
         };
     });
