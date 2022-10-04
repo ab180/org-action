@@ -42,6 +42,9 @@ inputs:
   action_token:
     description: "token used when check out itself"
     default: ${{ github.token }}
+  fetch-depth:
+    description: "number of commits to fetch. 0 indicates all history for all branches and tags."
+    default: 1
 outputs:
   token:
     description: "github app token, it is also exported to environment named as `GITHUB_APP_TOKEN` and can be used in same job"
