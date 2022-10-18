@@ -48190,7 +48190,8 @@ const prepareInput = () => {
             : hasPermission("contents-ro")
                 ? "read"
                 : undefined,
-        actions: hasPermission("actions-rw") ? "write" : undefined
+        actions: hasPermission("actions-rw") ? "write" : undefined,
+        checks: hasPermission("checks-rw") ? "write" : undefined,
     };
     return {
         appId,

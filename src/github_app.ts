@@ -12,6 +12,7 @@ import isBase64 from "is-base64";
 type Permission = {
     contents: "read" | "write" | undefined;
     actions: "write" | undefined;
+    checks: "write" | undefined;
 };
 type Input = {
     appId: string;
@@ -46,7 +47,8 @@ export const prepareInput = (): Input => {
             : hasPermission("contents-ro")
             ? "read"
             : undefined,
-        actions: hasPermission("actions-rw") ? "write" : undefined
+        actions: hasPermission("actions-rw") ? "write" : undefined,
+        checks: hasPermission("checks-rw") ? "write" : undefined,
     };
 
     return {
