@@ -11,6 +11,7 @@ inputs:
       - `contents-ro` : git checkout permission
       - `contents-rw` : git commit and permission, it contains contents-ro also
       - `actions-rw` : github actions(workflow) read and execute permission
+      - `checks-rw` : github checks read and write permission
     default: "contents-ro"
   checkout:
     description: |
