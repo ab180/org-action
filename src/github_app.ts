@@ -13,7 +13,7 @@ type Permission = {
     contents: "read" | "write" | undefined;
     actions: "write" | undefined;
     checks: "write" | undefined;
-    administration: "write" | undefined;
+    administration: "read" | undefined;
 };
 type Input = {
     appId: string;
@@ -50,7 +50,7 @@ export const prepareInput = (): Input => {
             : undefined,
         actions: hasPermission("actions-rw") ? "write" : undefined,
         checks: hasPermission("checks-rw") ? "write" : undefined,
-        administration: hasPermission("administration-rw") ? "write" : undefined,
+        administration: hasPermission("administration-ro") ? "read" : undefined,
     };
 
     return {
