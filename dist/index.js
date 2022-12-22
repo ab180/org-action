@@ -48193,7 +48193,7 @@ const prepareInput = () => {
         actions: hasPermission("actions-rw") ? "write" : undefined,
         checks: hasPermission("checks-rw") ? "write" : undefined,
         administration: hasPermission("administration-ro") ? "read" : undefined,
-        "pull-requests": hasPermission("pullrequest-rw") ? "write" : undefined
+        pullrequests: hasPermission("pullrequests-rw") ? "write" : undefined
     };
     return {
         appId,
