@@ -53,7 +53,7 @@ export const prepareInput = (): Input => {
         actions: hasPermission("actions-rw") ? "write" : undefined,
         checks: hasPermission("checks-rw") ? "write" : undefined,
         administration: hasPermission("administration-ro") ? "read" : undefined,
-        pull_requests: hasPermission("pullrequests-rw") ? "write" : undefined,
+        pull_requests: hasPermission("pull_requests-rw") ? "write" : undefined,
         issues: hasPermission("issues-rw")
             ? "write"
             : hasPermission("issues-ro")

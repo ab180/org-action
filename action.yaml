@@ -13,7 +13,7 @@ inputs:
       - `actions-rw` : github actions(workflow) read and execute permission
       - `checks-rw` : github checks read and write permission
       - `administration-ro` : github administration read only permission
-      - `pullrequest-rw` : github pull-requests read and write permission
+      - `pull_requests-rw` : github pull-requests read and write permission
       - `issues-ro` : github issues read only permission
       - `issues-rw` : github issues read and write permission
     default: "contents-ro"
