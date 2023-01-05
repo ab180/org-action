@@ -48193,7 +48193,7 @@ const prepareInput = () => {
         actions: hasPermission("actions-rw") ? "write" : undefined,
         checks: hasPermission("checks-rw") ? "write" : undefined,
         administration: hasPermission("administration-ro") ? "read" : undefined,
-        "pull-requests": hasPermission("pull-requests-rw") ? "write" : undefined,
+        pull_requests: hasPermission("pull-requests-rw") ? "write" : undefined,
         issues: hasPermission("issues-rw")
             ? "write"
             : hasPermission("issues-ro")
