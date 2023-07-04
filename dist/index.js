@@ -6444,11 +6444,9 @@ module.exports = v4;
 
 "use strict";
 
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -6462,14 +6460,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // pkg/dist-src/index.js
@@ -6485,7 +6475,6 @@ var import_auth_oauth_app = __nccwpck_require__(8459);
 
 // pkg/dist-src/auth.js
 var import_deprecation = __nccwpck_require__(8932);
-var OAuthAppAuth = __toESM(__nccwpck_require__(8459));
 
 // pkg/dist-src/get-app-authentication.js
 var import_universal_github_app_jwt = __nccwpck_require__(4419);
@@ -6749,7 +6738,6 @@ async function auth(state, authOptions) {
 
 // pkg/dist-src/hook.js
 var import_auth_oauth_user = __nccwpck_require__(1591);
-var import_request_error = __nccwpck_require__(5634);
 
 // pkg/dist-src/requires-app-auth.js
 var PATHS = [
@@ -6874,7 +6862,7 @@ async function sendRequestWithRetries(state, request, options, createdAt, retrie
 }
 
 // pkg/dist-src/version.js
-var VERSION = "5.0.6";
+var VERSION = "4.0.13";
 
 // pkg/dist-src/index.js
 var import_auth_oauth_user2 = __nccwpck_require__(1591);
@@ -6927,104 +6915,6 @@ function createAppAuth(options) {
     hook: hook.bind(null, state)
   });
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
-
-
-/***/ }),
-
-/***/ 5634:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  RequestError: () => RequestError
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_deprecation = __nccwpck_require__(8932);
-var import_once = __toESM(__nccwpck_require__(1223));
-var logOnceCode = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var logOnceHeaders = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var RequestError = class extends Error {
-  constructor(message, statusCode, options) {
-    super(message);
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    }
-    this.name = "HttpError";
-    this.status = statusCode;
-    let headers;
-    if ("headers" in options && typeof options.headers !== "undefined") {
-      headers = options.headers;
-    }
-    if ("response" in options) {
-      this.response = options.response;
-      headers = options.response.headers;
-    }
-    const requestCopy = Object.assign({}, options.request);
-    if (options.request.headers.authorization) {
-      requestCopy.headers = Object.assign({}, options.request.headers, {
-        authorization: options.request.headers.authorization.replace(
-          / .*$/,
-          " [REDACTED]"
-        )
-      });
-    }
-    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
-    this.request = requestCopy;
-    Object.defineProperty(this, "code", {
-      get() {
-        logOnceCode(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.code` is deprecated, use `error.status`."
-          )
-        );
-        return statusCode;
-      }
-    });
-    Object.defineProperty(this, "headers", {
-      get() {
-        logOnceHeaders(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."
-          )
-        );
-        return headers || {};
-      }
-    });
-  }
-};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
 
@@ -7143,7 +7033,7 @@ async function hook(state, request2, route, parameters) {
 }
 
 // pkg/dist-src/version.js
-var VERSION = "6.0.1";
+var VERSION = "5.0.6";
 
 // pkg/dist-src/index.js
 var import_auth_oauth_user3 = __nccwpck_require__(1591);
@@ -7302,7 +7192,7 @@ async function hook(state, request, route, parameters) {
 }
 
 // pkg/dist-src/version.js
-var VERSION = "5.0.2";
+var VERSION = "4.0.5";
 
 // pkg/dist-src/index.js
 function createOAuthDeviceAuth(options) {
@@ -7386,7 +7276,7 @@ var import_universal_user_agent = __nccwpck_require__(5030);
 var import_request = __nccwpck_require__(6234);
 
 // pkg/dist-src/version.js
-var VERSION = "3.0.1";
+var VERSION = "2.1.2";
 
 // pkg/dist-src/get-authentication.js
 var import_auth_oauth_device = __nccwpck_require__(4344);
@@ -8450,26 +8340,6 @@ __export(dist_src_exports, {
 });
 module.exports = __toCommonJS(dist_src_exports);
 
-// pkg/dist-src/defaults.js
-var import_universal_user_agent = __nccwpck_require__(5030);
-
-// pkg/dist-src/version.js
-var VERSION = "8.0.1";
-
-// pkg/dist-src/defaults.js
-var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
-var DEFAULTS = {
-  method: "GET",
-  baseUrl: "https://api.github.com",
-  headers: {
-    accept: "application/vnd.github.v3+json",
-    "user-agent": userAgent
-  },
-  mediaType: {
-    format: ""
-  }
-};
-
 // pkg/dist-src/util/lowercase-keys.js
 function lowercaseKeys(object) {
   if (!object) {
@@ -8520,14 +8390,12 @@ function merge(defaults, route, options) {
   removeUndefinedProperties(options);
   removeUndefinedProperties(options.headers);
   const mergedOptions = mergeDeep(defaults || {}, options);
-  if (options.url === "/graphql") {
-    if (defaults && defaults.mediaType.previews?.length) {
-      mergedOptions.mediaType.previews = defaults.mediaType.previews.filter(
-        (preview) => !mergedOptions.mediaType.previews.includes(preview)
-      ).concat(mergedOptions.mediaType.previews);
-    }
-    mergedOptions.mediaType.previews = (mergedOptions.mediaType.previews || []).map((preview) => preview.replace(/-preview/, ""));
+  if (defaults && defaults.mediaType.previews.length) {
+    mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews);
   }
+  mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map(
+    (preview) => preview.replace(/-preview/, "")
+  );
   return mergedOptions;
 }
 
@@ -8719,20 +8587,18 @@ function parse(options) {
   if (!isBinaryRequest) {
     if (options.mediaType.format) {
       headers.accept = headers.accept.split(/,/).map(
-        (format) => format.replace(
+        (preview) => preview.replace(
           /application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/,
           `application/vnd$1$2.${options.mediaType.format}`
         )
       ).join(",");
     }
-    if (url.endsWith("/graphql")) {
-      if (options.mediaType.previews?.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
-        headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-          const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-          return `application/vnd.github.${preview}-preview${format}`;
-        }).join(",");
-      }
+    if (options.mediaType.previews.length) {
+      const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+      headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
+        const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+        return `application/vnd.github.${preview}-preview${format}`;
+      }).join(",");
     }
   }
   if (["GET", "HEAD"].includes(method)) {
@@ -8775,6 +8641,27 @@ function withDefaults(oldDefaults, newDefaults) {
     parse
   });
 }
+
+// pkg/dist-src/defaults.js
+var import_universal_user_agent = __nccwpck_require__(5030);
+
+// pkg/dist-src/version.js
+var VERSION = "7.0.6";
+
+// pkg/dist-src/defaults.js
+var userAgent = `octokit-endpoint.js/${VERSION} ${(0, import_universal_user_agent.getUserAgent)()}`;
+var DEFAULTS = {
+  method: "GET",
+  baseUrl: "https://api.github.com",
+  headers: {
+    accept: "application/vnd.github.v3+json",
+    "user-agent": userAgent
+  },
+  mediaType: {
+    format: "",
+    previews: []
+  }
+};
 
 // pkg/dist-src/index.js
 var endpoint = withDefaults(null, DEFAULTS);
@@ -9494,34 +9381,13 @@ exports.request = request;
 /***/ }),
 
 /***/ 2272:
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  oauthAuthorizationUrl: () => oauthAuthorizationUrl
-});
-module.exports = __toCommonJS(dist_src_exports);
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
 function oauthAuthorizationUrl(options) {
   const clientType = options.clientType || "oauth-app";
   const baseUrl = options.baseUrl || "https://github.com";
@@ -9534,13 +9400,16 @@ function oauthAuthorizationUrl(options) {
     state: options.state || Math.random().toString(36).substr(2),
     url: ""
   };
+
   if (clientType === "oauth-app") {
     const scopes = "scopes" in options ? options.scopes : [];
     result.scopes = typeof scopes === "string" ? scopes.split(/[,\s]+/).filter(Boolean) : scopes;
   }
+
   result.url = urlBuilderAuthorize(`${baseUrl}/login/oauth/authorize`, result);
   return result;
 }
+
 function urlBuilderAuthorize(base, options) {
   const map = {
     allowSignup: "allow_signup",
@@ -9551,20 +9420,24 @@ function urlBuilderAuthorize(base, options) {
     state: "state"
   };
   let url = base;
-  Object.keys(map).filter((k) => options[k] !== null).filter((k) => {
-    if (k !== "scopes")
-      return true;
-    if (options.clientType === "github-app")
-      return false;
+  Object.keys(map) // Filter out keys that are null and remove the url key
+  .filter(k => options[k] !== null) // Filter out empty scopes array
+  .filter(k => {
+    if (k !== "scopes") return true;
+    if (options.clientType === "github-app") return false;
     return !Array.isArray(options[k]) || options[k].length > 0;
-  }).map((key) => [map[key], `${options[key]}`]).forEach(([key, value], index) => {
+  }) // Map Array with the proper URL parameter names and change the value to a string using template strings
+  // @ts-ignore
+  .map(key => [map[key], `${options[key]}`]) // Finally, build the URL
+  .forEach(([key, value], index) => {
     url += index === 0 ? `?` : "&";
     url += `${key}=${encodeURIComponent(value)}`;
   });
   return url;
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
+
+exports.oauthAuthorizationUrl = oauthAuthorizationUrl;
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -9620,7 +9493,7 @@ __export(dist_src_exports, {
 module.exports = __toCommonJS(dist_src_exports);
 
 // pkg/dist-src/version.js
-var VERSION = "3.0.2";
+var VERSION = "2.0.6";
 
 // pkg/dist-src/get-web-flow-authorization-url.js
 var import_oauth_authorization_url = __nccwpck_require__(2272);
@@ -9945,51 +9818,28 @@ async function deleteAuthorization(options) {
 /***/ }),
 
 /***/ 2434:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  RequestError: () => RequestError
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_deprecation = __nccwpck_require__(8932);
-var import_once = __toESM(__nccwpck_require__(1223));
-var logOnceCode = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var logOnceHeaders = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var RequestError = class extends Error {
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var deprecation = __nccwpck_require__(8932);
+var once = _interopDefault(__nccwpck_require__(1223));
+
+const logOnceCode = once(deprecation => console.warn(deprecation));
+const logOnceHeaders = once(deprecation => console.warn(deprecation));
+/**
+ * Error with extra properties to help with debugging
+ */
+class RequestError extends Error {
   constructor(message, statusCode, options) {
     super(message);
+    // Maintains proper stack trace (only available on V8)
+    /* istanbul ignore next */
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
@@ -10003,41 +9853,39 @@ var RequestError = class extends Error {
       this.response = options.response;
       headers = options.response.headers;
     }
+    // redact request credentials without mutating original request options
     const requestCopy = Object.assign({}, options.request);
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
-        authorization: options.request.headers.authorization.replace(
-          / .*$/,
-          " [REDACTED]"
-        )
+        authorization: options.request.headers.authorization.replace(/ .*$/, " [REDACTED]")
       });
     }
-    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+    requestCopy.url = requestCopy.url
+    // client_id & client_secret can be passed as URL query parameters to increase rate limit
+    // see https://developer.github.com/v3/#increasing-the-unauthenticated-rate-limit-for-oauth-applications
+    .replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]")
+    // OAuth tokens can be passed as URL query parameters, although it is not recommended
+    // see https://developer.github.com/v3/#oauth2-token-sent-in-a-header
+    .replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
     this.request = requestCopy;
+    // deprecations
     Object.defineProperty(this, "code", {
       get() {
-        logOnceCode(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.code` is deprecated, use `error.status`."
-          )
-        );
+        logOnceCode(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
         return statusCode;
       }
     });
     Object.defineProperty(this, "headers", {
       get() {
-        logOnceHeaders(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."
-          )
-        );
+        logOnceHeaders(new deprecation.Deprecation("[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."));
         return headers || {};
       }
     });
   }
-};
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
+}
+
+exports.RequestError = RequestError;
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -11495,9 +11343,11 @@ exports.RequestError = RequestError;
 
 "use strict";
 
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -11511,6 +11361,14 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // pkg/dist-src/index.js
@@ -11523,10 +11381,11 @@ var import_endpoint = __nccwpck_require__(9440);
 var import_universal_user_agent = __nccwpck_require__(5030);
 
 // pkg/dist-src/version.js
-var VERSION = "7.0.1";
+var VERSION = "6.2.8";
 
 // pkg/dist-src/fetch-wrapper.js
 var import_is_plain_object = __nccwpck_require__(3287);
+var import_node_fetch = __toESM(__nccwpck_require__(467));
 var import_request_error = __nccwpck_require__(13);
 
 // pkg/dist-src/get-buffer-response.js
@@ -11536,7 +11395,6 @@ function getBufferResponse(response) {
 
 // pkg/dist-src/fetch-wrapper.js
 function fetchWrapper(requestOptions) {
-  var _a;
   const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
   if ((0, import_is_plain_object.isPlainObject)(requestOptions.body) || Array.isArray(requestOptions.body)) {
     requestOptions.body = JSON.stringify(requestOptions.body);
@@ -11544,15 +11402,8 @@ function fetchWrapper(requestOptions) {
   let headers = {};
   let status;
   let url;
-  let { fetch } = globalThis;
-  if ((_a = requestOptions.request) == null ? void 0 : _a.fetch) {
-    fetch = requestOptions.request.fetch;
-  }
-  if (!fetch) {
-    throw new Error(
-      'Global "fetch" not found. Please provide `options.request.fetch` to octokit or upgrade to node@18 or newer.'
-    );
-  }
+  const fetch = requestOptions.request && requestOptions.request.fetch || globalThis.fetch || /* istanbul ignore next */
+  import_node_fetch.default;
   return fetch(
     requestOptions.url,
     Object.assign(
@@ -11701,51 +11552,28 @@ var request = withDefaults(import_endpoint.endpoint, {
 /***/ }),
 
 /***/ 13:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  RequestError: () => RequestError
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_deprecation = __nccwpck_require__(8932);
-var import_once = __toESM(__nccwpck_require__(1223));
-var logOnceCode = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var logOnceHeaders = (0, import_once.default)((deprecation) => console.warn(deprecation));
-var RequestError = class extends Error {
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var deprecation = __nccwpck_require__(8932);
+var once = _interopDefault(__nccwpck_require__(1223));
+
+const logOnceCode = once(deprecation => console.warn(deprecation));
+const logOnceHeaders = once(deprecation => console.warn(deprecation));
+/**
+ * Error with extra properties to help with debugging
+ */
+class RequestError extends Error {
   constructor(message, statusCode, options) {
     super(message);
+    // Maintains proper stack trace (only available on V8)
+    /* istanbul ignore next */
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
@@ -11759,41 +11587,39 @@ var RequestError = class extends Error {
       this.response = options.response;
       headers = options.response.headers;
     }
+    // redact request credentials without mutating original request options
     const requestCopy = Object.assign({}, options.request);
     if (options.request.headers.authorization) {
       requestCopy.headers = Object.assign({}, options.request.headers, {
-        authorization: options.request.headers.authorization.replace(
-          / .*$/,
-          " [REDACTED]"
-        )
+        authorization: options.request.headers.authorization.replace(/ .*$/, " [REDACTED]")
       });
     }
-    requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
+    requestCopy.url = requestCopy.url
+    // client_id & client_secret can be passed as URL query parameters to increase rate limit
+    // see https://developer.github.com/v3/#increasing-the-unauthenticated-rate-limit-for-oauth-applications
+    .replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]")
+    // OAuth tokens can be passed as URL query parameters, although it is not recommended
+    // see https://developer.github.com/v3/#oauth2-token-sent-in-a-header
+    .replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
     this.request = requestCopy;
+    // deprecations
     Object.defineProperty(this, "code", {
       get() {
-        logOnceCode(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.code` is deprecated, use `error.status`."
-          )
-        );
+        logOnceCode(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
         return statusCode;
       }
     });
     Object.defineProperty(this, "headers", {
       get() {
-        logOnceHeaders(
-          new import_deprecation.Deprecation(
-            "[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."
-          )
-        );
+        logOnceHeaders(new deprecation.Deprecation("[@octokit/request-error] `error.headers` is deprecated, use `error.response.headers`."));
         return headers || {};
       }
     });
   }
-};
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
+}
+
+exports.RequestError = RequestError;
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -65981,7 +65807,7 @@ class LRUCache {
         const pcall = (res, rej) => {
             const fmp = this.#fetchMethod?.(k, v, fetchOpts);
             if (fmp && fmp instanceof Promise) {
-                fmp.then(v => res(v === undefined ? undefined : v), rej);
+                fmp.then(v => res(v), rej);
             }
             // ignored, we go until we finish, regardless.
             // defer check until we are actually aborting,
@@ -65989,7 +65815,7 @@ class LRUCache {
             ac.signal.addEventListener('abort', () => {
                 if (!options.ignoreFetchAbort ||
                     options.allowStaleOnFetchAbort) {
-                    res(undefined);
+                    res();
                     // when it eventually resolves, update the cache.
                     if (options.allowStaleOnFetchAbort) {
                         res = v => cb(v, true);
