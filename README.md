@@ -31,6 +31,11 @@ We use organization install to access private repositories in organization.
     # - `contents-ro` : git checkout permission
     # - `contents-rw` : git commit and permission, it contains contents-ro also
     # - `actions-rw` : github actions(workflow) read and execute permission
+    # - `checks-rw` : github checks read and write permission
+    # - `administration-ro` : github administration read only permission
+    # - `pull-requests-rw` : github pull-requests read and write permission
+    # - `issues-ro` : github issues read only permission
+    # - `issues-rw` : github issues read and write permission
     # 
     # default "contents-ro", only checkout
     app_permission: "contents-ro"
