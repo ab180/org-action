@@ -95,6 +95,21 @@ export const installationToken = async (input: Input) => {
         );
     }
 
+    try {
+        ({
+            data: { id: installationId }
+        } = await octokit.rest.apps.getRepoInstallation({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo
+        }));
+    } catch (error: unknown) {
+        throw new Error(
+            `org-action을 해당 레포에서 사용하려면 #req-devops 채널에 요청해주세요 : ${ensureError(
+                error
+            )}`
+        );
+    }
+
     const installation = await app({
         installationId,
         permissions: input.permission,
