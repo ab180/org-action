@@ -74,7 +74,7 @@ export const updateGlobalCredential = async (
     token: string,
     workspace: string
 ) => {
-    const git = await createCommandManager(workspace, false);
+    const git = await createCommandManager(workspace, false, false);
     const serverUrl = getServerUrl();
 
     const tokenConfigKey = `http.${serverUrl.origin}/.extraheader`; // "origin" is SCHEME://HOSTNAME[:PORT]

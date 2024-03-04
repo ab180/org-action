@@ -36,6 +36,8 @@ We use organization install to access private repositories in organization.
     # - `pull-requests-rw` : github pull-requests read and write permission
     # - `issues-ro` : github issues read only permission
     # - `issues-rw` : github issues read and write permission
+    # - `packages-ro` : github packages read only permission
+    # - `packages-rw` : github packages read and write permission
     # 
     # default "contents-ro", only checkout
     app_permission: "contents-ro"

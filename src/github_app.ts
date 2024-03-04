@@ -16,6 +16,7 @@ type Permission = {
     administration: "read" | undefined;
     pull_requests: "write" | undefined;
     issues: "read" | "write" | undefined;
+    packages: "read" | "write" | undefined;
 };
 type Input = {
     appId: string;
@@ -59,6 +60,11 @@ export const prepareInput = (): Input => {
             : hasPermission("issues-ro")
             ? "read"
             : undefined,
+        packages: hasPermission("packages-rw")
+            ? "write"
+            : hasPermission("packages-ro")
+            ? "read"
+            : undefined
     };
 
     return {
